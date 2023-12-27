@@ -18,7 +18,7 @@
 // The latter two sizeof statements are 4 bytes on 32-bit systems and 8 bytes on 64-bit systems.
 // For example, with GECS_MAX_TYPES = 256 and GECS_MAX_TYPENAME_LENGTH = 64, the total minimum memory footprint of
 // GECS due to type storage requirements is 20.48 kB.
-#define GECS_MAX_TYPES 256
+#define GECS_MAX_TYPES 64
 // The following includes the null terminator, so the number of characters permitted is this minus 1
 #define GECS_MAX_TYPENAME_LENGTH 64
 

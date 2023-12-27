@@ -3,17 +3,20 @@
 typedef struct{int texID; uint8_t r; uint8_t g; uint8_t b; uint8_t alpha;} TextureData;
 
 int main() {
+    GECS_Bitset testBitSet = 0;
+    GECS_BitsetFlip(&testBitSet, 0);
+    GECS_BitsetFlip(&testBitSet, 1);
+    GECS_BitsetFlip(&testBitSet, 63);
 
-    TextureData* sampleTextureData = malloc(sizeof(TextureData));
-    sampleTextureData->texID = 0; sampleTextureData->r = 255; sampleTextureData->g = 255; sampleTextureData->b = 255;
-    sampleTextureData->alpha = 255;
+    GECS_BitsetSet(&testBitSet, 0, 0);
+    GECS_BitsetSet(&testBitSet, 1, 1);
+    GECS_BitsetSet(&testBitSet, 2, 1);
+    GECS_BitsetSet(&testBitSet, 3, 0);
 
-    GECS_AddTypeDefinition("Texture Data", sizeof(TextureData), sampleTextureData);
 
-    GECS_GData* testGData = GECS_MakeGData(0);
-    GECS_Array* testArray = GECS_ArrayConstruct(0, 2000);
-    GECS_ArrayAppend(testArray, testGData);
-    GECS_FreeGData(testGData);
+    GECS_DEBUG_BitsetPrint(&testBitSet);
+
+    GECS_Instance* ecs = GECS_Init();
 
 
 }

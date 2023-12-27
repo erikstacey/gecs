@@ -1,0 +1,21 @@
+//
+// Created by Erik Stacey on 2023-12-26.
+//
+
+#ifndef GECS_GECS_BITSET_H
+#define GECS_GECS_BITSET_H
+#include <stdint.h>
+
+typedef u_int64_t GECS_Bitset;
+
+// flips the bit at position i in the bitset b
+void GECS_BitsetFlip(GECS_Bitset* b, int i);
+// sets the bit at position i to the given explicit value (value = 0; 0, value >0; 1) in the bitset b
+void GECS_BitsetSet(GECS_Bitset* b, int i, int value);
+// returns 0 or 1 based on the value of position i in bitset b
+int GECS_BitsetCheck(GECS_Bitset* b, int i);
+// Prints the bitset to console
+void GECS_DEBUG_BitsetPrint(GECS_Bitset* b);
+
+
+#endif //GECS_GECS_BITSET_H

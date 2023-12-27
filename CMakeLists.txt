@@ -13,6 +13,9 @@ add_library(gecs STATIC
     src/gecs.c src/gecs_array.c
         src/gecs_gdata.c
         src/gecs_typedefs.c
+        src/gecs_componentgroup.c
+        src/gecs_bitset.c
+        src/gecs_entityarray.c
 )
 add_executable(ExampleTest examples/ExampleTest.c)
 target_link_libraries(ExampleTest gecs)
