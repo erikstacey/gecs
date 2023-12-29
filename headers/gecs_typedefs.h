@@ -18,23 +18,20 @@
 // The latter two sizeof statements are 4 bytes on 32-bit systems and 8 bytes on 64-bit systems.
 // For example, with GECS_MAX_TYPES = 256 and GECS_MAX_TYPENAME_LENGTH = 64, the total minimum memory footprint of
 // GECS due to type storage requirements is 20.48 kB.
-#define GECS_MAX_TYPES 64
+#define GECS_MAX_COMPONENTS 64
 // The following includes the null terminator, so the number of characters permitted is this minus 1
-#define GECS_MAX_TYPENAME_LENGTH 64
+#define GECS_MAX_COMPONENT_NAME_LENGTH 64
 
 typedef uint32_t GECS_EntityId;
 typedef char GECS_TypeId;
 
 typedef struct{
-    char name[GECS_MAX_TYPENAME_LENGTH];
+    char name[GECS_MAX_COMPONENT_NAME_LENGTH];
     size_t size;
     void* prototype;
-} GECS_TypeDefinition;
+} GECS_ComponentDefinition;
 
-GECS_TypeDefinition GECS_DEFINEDTYPES[GECS_MAX_TYPES];
-extern GECS_TypeId GECS_NUMTYPES;
 
-void GECS_AddTypeDefinition(char name[], size_t size, void* prototype);
 
 
 

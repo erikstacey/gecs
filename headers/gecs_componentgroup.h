@@ -4,7 +4,6 @@
 
 #ifndef GECS_GECS_COMPONENTGROUP_H
 #define GECS_GECS_COMPONENTGROUP_H
-#include "gecs_array.h"
 
 typedef struct{
     int i;

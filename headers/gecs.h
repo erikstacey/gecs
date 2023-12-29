@@ -1,13 +1,13 @@
 #ifndef GECS_GECS_H
 #define GECS_GECS_H
 #include "gecs_typedefs.h"
-#include "gecs_array.h"
 #include "gecs_gdata.h"
 #include "gecs_componentgroup.h"
 #include "gecs_bitset.h"
 #include "gecs_entityarray.h"
 
 typedef struct{
+    GECS_ComponentDefinition baseComponents[GECS_MAX_COMPONENTS];
     // This is an array of pointers to component groups.
     GECS_ComponentGroup** componentGroups;
     // An array of bitsets that is used in looking up a component group
@@ -15,7 +15,6 @@ typedef struct{
     GECS_Bitset *componentGroupsMapping;
     // An array of pointers to the CGs
     int nComponentGroups;
-
     GECS_EntityArray entities;
 
 } GECS_Instance;
