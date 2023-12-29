@@ -23,7 +23,7 @@
 #define GECS_MAX_TYPENAME_LENGTH 64
 
 typedef uint32_t GECS_EntityId;
-typedef uint16_t GECS_TypeId;
+typedef char GECS_TypeId;
 
 typedef struct{
     char name[GECS_MAX_TYPENAME_LENGTH];

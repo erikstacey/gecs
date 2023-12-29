@@ -8,7 +8,6 @@
 
 typedef struct{
     int i;
-    GECS_Array componentArrays[];
 } GECS_ComponentGroup;
 
 #endif //GECS_GECS_COMPONENTGROUP_H

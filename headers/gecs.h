@@ -8,11 +8,14 @@
 #include "gecs_entityarray.h"
 
 typedef struct{
+    // This is an array of pointers to component groups.
+    GECS_ComponentGroup** componentGroups;
     // An array of bitsets that is used in looking up a component group
     // This remains ordered, so a binary search can always find a CG in log(n) time
     GECS_Bitset *componentGroupsMapping;
     // An array of pointers to the CGs
-    GECS_ComponentGroup** componentGroups;
+    int nComponentGroups;
+
     GECS_EntityArray entities;
 
 } GECS_Instance;
