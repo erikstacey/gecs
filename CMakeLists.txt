@@ -11,7 +11,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bib)
 include_directories(headers)
 add_library(gecs STATIC
     src/gecs.c
-        src/gecs_gdata.c
         src/gecs_componentgroup.c
         src/gecs_bitset.c
         src/gecs_entityarray.c

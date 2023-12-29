@@ -1,6 +1,7 @@
 #include "gecs.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 GECS_Instance* GECS_Init() {
     // initialize the ecs
@@ -36,5 +37,5 @@ void GECS_Close(GECS_Instance* i) {
     for (int k = 0; k < i->nComponentGroups; k++) {
 
     }
-
+    free(i);
 }

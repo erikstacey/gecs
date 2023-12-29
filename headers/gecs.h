@@ -1,7 +1,6 @@
 #ifndef GECS_GECS_H
 #define GECS_GECS_H
 #include "gecs_typedefs.h"
-#include "gecs_gdata.h"
 #include "gecs_componentgroup.h"
 #include "gecs_bitset.h"
 #include "gecs_entityarray.h"
