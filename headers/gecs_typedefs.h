@@ -23,16 +23,12 @@
 #define GECS_MAX_COMPONENT_NAME_LENGTH 64
 
 typedef uint32_t GECS_EntityId;
-typedef char GECS_TypeId;
+typedef uint8_t GECS_ComponentId;
 
 typedef struct{
     char name[GECS_MAX_COMPONENT_NAME_LENGTH];
     size_t size;
     void* prototype;
 } GECS_ComponentDefinition;
-
-
-
-
 
 #endif //GECS_GECS_TYPEDEFS_H

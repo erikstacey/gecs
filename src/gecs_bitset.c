@@ -28,7 +28,7 @@ void GECS_BitsetSet(GECS_Bitset* b, int i, int value) {
     }
 }
 
-int GECS_BitsetCheck(GECS_Bitset* b, int i) {
+int GECS_BitsetCheck(const GECS_Bitset* b, int i) {
     if (*b & (1ULL << i)) {
         return 1;
     }
@@ -37,7 +37,17 @@ int GECS_BitsetCheck(GECS_Bitset* b, int i) {
     }
 }
 
-void GECS_DEBUG_BitsetPrint(GECS_Bitset* b) {
+int GECS_BitsetSum(const GECS_Bitset* bitset) {
+    int count = 0;
+    GECS_Bitset b = *bitset;
+    while (b) {
+        count += b & 1ULL;
+        b >>= 1;
+    }
+    return count;
+}
+
+void GECS_DEBUG_BitsetPrint(const GECS_Bitset* b) {
     printf("DEBUG BITSET: ");
     for (int i = 0; i < 64; i++) {
         printf("%i", GECS_BitsetCheck(b, i));
