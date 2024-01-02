@@ -22,6 +22,10 @@ int main() {
     GECS_DEBUG_BitsetPrint(&testBitset);
     printf("Num bits: %d\n", GECS_BitsetSum(&testBitset));
 
+    testBitset = 100;
+    GECS_DEBUG_BitsetPrint(&testBitset);
+    printf("Num bits up to value: %d\n", GECS_BitsetCountUpTo(&testBitset, 5));
+
     testBitset = 0;
 
     GECS_BitsetSet(&testBitset, 0, 1);

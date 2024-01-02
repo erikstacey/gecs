@@ -16,6 +16,8 @@ void GECS_BitsetSet(GECS_Bitset* b, int i, int value);
 int GECS_BitsetCheck(const GECS_Bitset* b, int i);
 // Get the number of set bits
 int GECS_BitsetSum(const GECS_Bitset* b);
+// Get the number of set bits up to a specified bit
+int GECS_BitsetCountUpTo(const GECS_Bitset* bitset, int bit);
 // Prints the bitset to console
 void GECS_DEBUG_BitsetPrint(const GECS_Bitset* b);
 

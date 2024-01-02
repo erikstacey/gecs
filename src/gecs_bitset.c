@@ -4,6 +4,8 @@
 #include "gecs_bitset.h"
 #include <stdio.h>
 
+
+
 void GECS_BitsetFlip(GECS_Bitset* b, int i) {
     if (i<0 || i > 63) {
         // do nothing if i is not valid (0<i<63)
@@ -38,6 +40,9 @@ int GECS_BitsetCheck(const GECS_Bitset* b, int i) {
 }
 
 int GECS_BitsetSum(const GECS_Bitset* bitset) {
+#ifdef __GNUC__
+    return __builtin_popcount(*bitset);
+#else
     int count = 0;
     GECS_Bitset b = *bitset;
     while (b) {
@@ -45,6 +50,15 @@ int GECS_BitsetSum(const GECS_Bitset* bitset) {
         b >>= 1;
     }
     return count;
+#endif
+}
+
+int GECS_BitsetCountUpTo(const GECS_Bitset* bitset, int bit) {
+    // Make a mask bitset which has all values set up to and including bit
+    GECS_Bitset b = (1ULL << (bit+1)) - 1;
+    b = (b & *bitset);
+    return GECS_BitsetSum(&b);
+
 }
 
 void GECS_DEBUG_BitsetPrint(const GECS_Bitset* b) {
