@@ -21,6 +21,8 @@ GECS_CGDArray* GECS_CGDArrayInit(GECS_ComponentDefinition* type, GECS_EntityId i
 
 // resizes the allocated memory for the CGDArray a
 void GECS_CGDArrayResize(GECS_CGDArray* a, GECS_EntityId newSize);
+// Gets the pointer to a SPECIFIC element. The user is responsible for casting this to the appropriate type.
+void* GECS_CGDArrayGetPtrToElement(GECS_CGDArray* a, GECS_EntityId idx);
 
 // Closes the CGDArray. As these are intended to be used in arrays in ComponentGroups, this DOES NOT free a, as
 // a should be freed by the parent componentgroup when freeing its array of CGDArrays

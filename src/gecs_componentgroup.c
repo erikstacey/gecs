@@ -99,5 +99,13 @@ void GECS_ComponentGroupRemoveEntity(GECS_ComponentGroup* cg, GECS_EntityId id) 
     }
 }
 
+GECS_CGDArray* GECS_ComponentGroupGetCGDArray(GECS_ComponentGroup* cg, GECS_ComponentId cId) {
+    return cg->dataArrays + GECS_BitsetCountUpTo(&(cg->componentMask), cId) - 1;
+
+}
+
 void* GECS_ComponentGroupGet(GECS_ComponentGroup* cg, GECS_EntityId eId, GECS_ComponentId cId) {
+    GECS_CGDArray* arr = GECS_ComponentGroupGetCGDArray(cg, cId);
+    GECS_EntityId idx = GECS_ComponentGroupFindEntity(cg, eId);
+    return GECS_CGDArrayGetPtrToElement(arr, idx);
 }

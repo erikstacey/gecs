@@ -37,9 +37,10 @@ void GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id
 void GECS_ComponentGroupRemoveEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
 // finds and returns the index corresponding to the specified entity
 GECS_EntityId GECS_ComponentGroupFindEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
-//
+// gets a pointer to the CGD array corresponding to the specified component ID
 GECS_CGDArray* GECS_ComponentGroupGetCGDArray(GECS_ComponentGroup* cg, GECS_ComponentId cId);
-// returns a pointer to the component data for the specified entity
+// returns a pointer to the component data for the specified entity. THE USER IS RESPONSIBLE FOR CASTING THIS
+// TO THE CORRECT TYPE.
 void* GECS_ComponentGroupGet(GECS_ComponentGroup* cg, GECS_EntityId eId, GECS_ComponentId cId);
 
 
