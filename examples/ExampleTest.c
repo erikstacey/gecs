@@ -39,8 +39,14 @@ int main() {
 
     GECS_ComponentGroup* testCG = GECS_ComponentGroupInit(&testBitset, ecs->baseComponents);
     GECS_ComponentGroupResize(testCG, 10);
+    for (int i = 1; i < 6; ++i) {
+        GECS_ComponentGroupRegisterEntity(testCG, i);
+    }
+    GECS_ComponentGroupRemoveEntity(testCG, 3);
+
     GECS_ComponentGroupClose(*testCG);
     free(testCG);
+
 
     GECS_Close(ecs);
 

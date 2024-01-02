@@ -6,8 +6,11 @@
 
 GECS_ComponentGroup* GECS_ComponentGroupInit(GECS_Bitset* componentMask,
                                              GECS_ComponentDefinition baseComponents[GECS_MAX_COMPONENTS]) {
+    GECS_CheckInput(componentMask, "ComponentGroupInit", "componentMask");
+
     GECS_ComponentGroup* newCG = malloc(sizeof(GECS_ComponentGroup));
     GECS_CheckAlloc(newCG, "ComponentGroupInit", "Allocated Component Group");
+    newCG->componentMask = *componentMask;
 
     // track the number of components
     int numComponents = 0;
@@ -33,6 +36,7 @@ GECS_ComponentGroup* GECS_ComponentGroupInit(GECS_Bitset* componentMask,
 }
 
 void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityId newSize) {
+    GECS_CheckInput(c, "ComponentGroupResize", "c");
     // resize all data arrays
     for (int i = 0; i < c->numComponents; ++i) {
         GECS_CGDArrayResize(c->dataArrays + i, newSize);
@@ -44,8 +48,6 @@ void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityId newSize) {
 }
 
 void GECS_ComponentGroupClose(GECS_ComponentGroup c) {
-    // works backwards closing each data array and freeing them
-    // when it gets to the first element, it frees the entire
     for (int i = 0; i < c.numComponents; ++i) {
         GECS_CGDArrayClose(c.dataArrays+i);
     }
@@ -53,4 +55,49 @@ void GECS_ComponentGroupClose(GECS_ComponentGroup c) {
     c.idList = NULL;
     free(c.dataArrays);
     c.dataArrays = NULL;
+}
+
+void GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
+    GECS_CheckInput(cg, "ComponentGroupRegisterEntity", "cg");
+    // Check if we must reallocate, do so if necessary
+    if (cg->dataArraysLen >= cg->dataArraysSize) {
+        GECS_ComponentGroupResize(cg, (cg->dataArraysSize+10)*1.2);
+    }
+    cg->idList[cg->dataArraysLen] = id;
+    cg->dataArraysLen++;
+
+}
+
+GECS_EntityId GECS_ComponentGroupFindEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
+    GECS_CheckInput(cg, "ComponentGroupFindEntity", "cg");
+    // basic linear search for now
+    // can optimize this later if necessary
+    for (GECS_EntityId i= 0; i < cg->dataArraysLen; ++i) {
+        if (cg->idList[i] == id) {
+            return i;
+        }
+    }
+    // Not ideal, but returns the first unassigned index if we can't find the entity.
+    return cg->dataArraysLen;
+}
+
+void GECS_ComponentGroupRemoveEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
+    GECS_CheckInput(cg, "ComponentGroupRemoveEntity", "cg");
+    GECS_EntityId index = GECS_ComponentGroupFindEntity(cg, id);
+    // case where we cannot find entity
+    if (index == cg->dataArraysLen) {
+        return;
+    }
+    else {
+        // First overwrite the idList
+        memmove(cg->idList+index, cg->idList+index+1, sizeof(GECS_EntityId) * (cg->dataArraysLen-index));
+        // Perform the same operation on the data arrays
+        for (int i = 0; i < cg->numComponents; ++i) {
+            memmove(cg->dataArrays[i].d+index, cg->dataArrays[i].d+index+1,
+                    cg->dataArrays[i].type->size*(cg->dataArraysLen-index));
+            }
+    }
+}
+
+void* GECS_ComponentGroupGet(GECS_ComponentGroup* cg, GECS_EntityId eId, GECS_ComponentId cId) {
 }

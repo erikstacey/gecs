@@ -11,7 +11,13 @@ void GECS_CheckAlloc(void* p, char* func, char* obj) {
     }
 }
 
-int GECS_CheckRealloc(void* p, char* func, char* obj) {
-
+int GECS_CheckInput(void* p, char* func, char* arg) {
+    if (p == NULL) {
+        fprintf(stderr, "[GECS]  Null argument in %s: %s!\n", func, arg);
+        return 0;
+    }
+    else {
+        return 1;
+    }
 }
 
