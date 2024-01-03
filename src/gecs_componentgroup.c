@@ -57,7 +57,7 @@ void GECS_ComponentGroupClose(GECS_ComponentGroup c) {
     c.dataArrays = NULL;
 }
 
-void GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
+GECS_EntityId GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
     GECS_CheckInput(cg, "ComponentGroupRegisterEntity", "cg");
     // Check if we must reallocate, do so if necessary
     if (cg->dataArraysLen >= cg->dataArraysSize) {
@@ -108,4 +108,42 @@ void* GECS_ComponentGroupGet(GECS_ComponentGroup* cg, GECS_EntityId eId, GECS_Co
     GECS_CGDArray* arr = GECS_ComponentGroupGetCGDArray(cg, cId);
     GECS_EntityId idx = GECS_ComponentGroupFindEntity(cg, eId);
     return GECS_CGDArrayGetPtrToElement(arr, idx);
+}
+
+void GECS_ComponentGroupMigrate(GECS_ComponentGroup* cgSending, GECS_ComponentGroup* cgReceiving, GECS_EntityId id) {
+    GECS_CheckInput(cgSending, "ComponentGroupMigrate", "cgSending");
+    GECS_CheckInput(cgReceiving, "ComponentGroupMigrate", "cgReceiving");
+
+    GECS_EntityId sendingIdx = GECS_ComponentGroupFindEntity(cgSending, id);
+    if (sendingIdx == cgSending->dataArraysLen) {
+        fprintf(stderr, "[GECS] Error in GECS_ComponentGroupMigrate: cgSending doesn't have entity %du", id);
+    }
+    GECS_EntityId receivingIdx = GECS_ComponentGroupRegisterEntity(cgReceiving, id);
+
+    // pointers to use in the subsequent loop which indicate where to copy data from and to
+    size_t sizeToCopy;
+    void* copyFrom;
+    void* copyTo;
+    // a component mask of only the shared components, which we can check when looking where to copy data
+    GECS_Bitset sharedComponents = (cgSending->componentMask) & (cgReceiving->componentMask);
+    for (int i = 0; i < 64; ++i) {
+        if (GECS_BitsetCheck(&sharedComponents, i)) {
+            copyFrom = GECS_ComponentGroupGet(cgSending, id, i);
+            copyTo = GECS_ComponentGroupGet(cgReceiving, id, i);
+            sizeToCopy = (GECS_ComponentGroupGetCGDArray(cgReceiving, i)->type->size);
+            // Make sure sizes match, if they don't for whatever reason then things are very not good
+            // This should NEVER happen due to the universal nature of component IDs, unless the user
+            // directly modifies the GECS memory structure themself (don't do this, use the top-level
+            // gecs functions instead)
+            if ((GECS_ComponentGroupGetCGDArray(cgSending, i)->type->size) != sizeToCopy) {
+                fprintf(stderr, "[GECS] Error in ComponentGroupMigrate: While copying data over, found a size"
+                                "mismatch in component %d!", i);
+                exit(1);
+            }
+            memcpy(copyFrom, copyTo, sizeToCopy);
+        }
+    }
+    // Having copied data over, it is time to remove the entity from the sending array. This crunches the sending group
+    // data arrays down to overwrite its data, thereby implicitely deleting its data as well.
+    GECS_ComponentGroupRemoveEntity(cgSending, id);
 }

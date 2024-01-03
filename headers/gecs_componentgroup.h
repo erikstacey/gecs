@@ -32,7 +32,7 @@ GECS_ComponentGroup* GECS_ComponentGroupInit(GECS_Bitset* componentMask,
 void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityId newSize);
 
 // Registers an entity in the component group. Does not set any data, but implicitely assigns space for its data
-void GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
+GECS_EntityId GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
 // Removes an Entity from the component group. Shifts all data so it's contiguous as well.
 void GECS_ComponentGroupRemoveEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
 // finds and returns the index corresponding to the specified entity
@@ -42,6 +42,8 @@ GECS_CGDArray* GECS_ComponentGroupGetCGDArray(GECS_ComponentGroup* cg, GECS_Comp
 // returns a pointer to the component data for the specified entity. THE USER IS RESPONSIBLE FOR CASTING THIS
 // TO THE CORRECT TYPE.
 void* GECS_ComponentGroupGet(GECS_ComponentGroup* cg, GECS_EntityId eId, GECS_ComponentId cId);
+
+void GECS_ComponentGroupMigrate(GECS_ComponentGroup* cgSending, GECS_ComponentGroup* cgReceiving, GECS_EntityId id);
 
 
 // Closes a componentgroup by freeing all its (dynamically allocated) children after instructing them to do the same

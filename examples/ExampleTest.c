@@ -6,6 +6,7 @@ typedef struct{int texID; uint8_t r; uint8_t g; uint8_t b; uint8_t alpha;} Textu
 typedef struct{float x; float y; float z;} PositionData;
 
 int main() {
+
     fprintf(stderr, "STD Err TEST!\n");
     // Bitset
     GECS_Bitset testBitset = 1;
