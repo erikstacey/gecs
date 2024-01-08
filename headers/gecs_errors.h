@@ -10,6 +10,7 @@
 
 // Checks if the pointer is null. If so, prints an error message and exits the program.
 void GECS_CheckAlloc(void* p, char* func, char* obj);
+// Prints an error message and returns 0 if p is NULL. Else, returns 1.
 int GECS_CheckInput(void* p, char* func, char* arg);
 
 #endif //GECS_GECS_ERRORS_H
