@@ -4,42 +4,40 @@
 #include <stdlib.h>
 #include "gecs_componentgroup.h"
 
-GECS_ComponentGroup* GECS_ComponentGroupInit(GECS_Bitset* componentMask,
-                                             GECS_ComponentDefinition baseComponents[GECS_MAX_COMPONENTS]) {
+void GECS_ComponentGroupInit(GECS_ComponentGroup* c, GECS_Bitset* componentMask,
+                                             GECS_ComponentDefinition* baseComponents) {
     GECS_CheckInput(componentMask, "ComponentGroupInit", "componentMask");
+    GECS_CheckInput(c, "ComponentGroupInit", "CG");
 
-    GECS_ComponentGroup* newCG = malloc(sizeof(GECS_ComponentGroup));
-    GECS_CheckAlloc(newCG, "ComponentGroupInit", "Allocated Component Group");
-    newCG->componentMask = *componentMask;
+    GECS_CheckAlloc(c, "ComponentGroupInit", "Allocated Component Group");
+    c->componentMask = *componentMask;
 
     // track the number of components
     int numComponents = 0;
     // allocate the data arrays
-    newCG->dataArrays = malloc(sizeof(GECS_CGDArray*)*(GECS_BitsetSum(componentMask)));
+    size_t allocatedSize = sizeof(GECS_CGDArray)*(GECS_BitsetSum(componentMask));
+    c->dataArrays = malloc(allocatedSize);
     // Iterate over the complete bitset to collect all the components
     for (int i = 0; i < 64; i++) {
         if (GECS_BitsetCheck(componentMask, i)) {
-            GECS_CGDArray* newArray = GECS_CGDArrayInit(&(baseComponents[i]), 1);
-            newCG->dataArrays[numComponents] = *newArray;
+            GECS_CGDArrayInit(c->dataArrays+numComponents, baseComponents+i, 1);
             numComponents++;
         }
     }
     // set the number of components
-    newCG->numComponents = numComponents;
-    newCG->idList = malloc(sizeof(GECS_EntityId));
-    GECS_CheckAlloc(newCG->idList, "ComponentGroupInit", "idList");
+    c->numComponents = numComponents;
+    c->idList = malloc(sizeof(GECS_EntityId));
+    GECS_CheckAlloc(c->idList, "ComponentGroupInit", "idList");
 
-    newCG->dataArraysLen = 0;
-    newCG->dataArraysSize = 1;
-
-    return newCG;
+    c->dataArraysLen = 0;
+    c->dataArraysSize = 1;
 }
 
 void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityId newSize) {
     GECS_CheckInput(c, "ComponentGroupResize", "c");
     // resize all data arrays
     for (int i = 0; i < c->numComponents; ++i) {
-        GECS_CGDArrayResize(c->dataArrays + i, newSize);
+        GECS_CGDArrayResize(c->dataArrays+i, newSize);
     }
     GECS_EntityId* newIdList = realloc(c->idList, sizeof(GECS_EntityId) * newSize);
     GECS_CheckAlloc(newIdList, "ComponentGroupResize", "Reallocated ID List");
@@ -47,14 +45,15 @@ void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityId newSize) {
     c->dataArraysSize = newSize;
 }
 
-void GECS_ComponentGroupClose(GECS_ComponentGroup c) {
-    for (int i = 0; i < c.numComponents; ++i) {
-        GECS_CGDArrayClose(c.dataArrays+i);
+void GECS_ComponentGroupClose(GECS_ComponentGroup* c) {
+    // instruct all CGDArrays to close their children
+    for (int i = 0; i < c->numComponents; ++i) {
+        GECS_CGDArrayClose(c->dataArrays+i);
     }
-    free(c.idList);
-    c.idList = NULL;
-    free(c.dataArrays);
-    c.dataArrays = NULL;
+    // De-allocated all CGD arrays and the ID list
+    free(c->idList);
+    c->dataArrays = NULL;
+    c->idList = NULL;
 }
 
 GECS_EntityId GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {

@@ -6,7 +6,7 @@
 #define GECS_GECS_BITSET_H
 #include <stdint.h>
 
-typedef u_int64_t GECS_Bitset;
+typedef uint64_t GECS_Bitset;
 
 // flips the bit at position i in the bitset b
 void GECS_BitsetFlip(GECS_Bitset* b, int i);

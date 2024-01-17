@@ -10,7 +10,7 @@ typedef struct{
     // Holds type definitions for the components.
     // Each is a GECS_ComponentDefinition object which stores a name, size, and prototype for each component.
     GECS_ComponentDefinition baseComponents[GECS_MAX_COMPONENTS];
-    u_int8_t definedComponentsLen;
+    uint8_t definedComponentsLen;
     // This is an array of pointers to component groups.
     GECS_ComponentGroup* componentGroups;
     // An array of bitsets that is used in looking up a component group
@@ -54,6 +54,8 @@ void GECS_RegisterComponent(GECS_Instance* i, GECS_ComponentId id, char* name, s
 GECS_ComponentGroup* GECS_CreateAndAddComponentGroup(GECS_Instance, GECS_Bitset bitset);
 // Retrieves the component group corresponding to the provided bitset, which indices the presence of certain components
 GECS_ComponentGroup* GECS_GetComponentGroup(GECS_Instance* i, GECS_Bitset bitset);
+// Get the index of the component group
+uint64_t GECS_GetComponentGroupIndex(const GECS_Bitset* arr, uint64_t left, uint64_t right, GECS_Bitset target);
 
 
 #endif //GECS_GECS_H

@@ -8,33 +8,11 @@ typedef struct{float x; float y; float z;} PositionData;
 int main() {
 
     fprintf(stderr, "STD Err TEST!\n");
-    // Bitset
-    GECS_Bitset testBitset = 1;
-    GECS_DEBUG_BitsetPrint(&testBitset);
-    printf("Num bits: %d\n", GECS_BitsetSum(&testBitset));
-    testBitset++;
-    GECS_DEBUG_BitsetPrint(&testBitset);
-    printf("Num bits: %d\n", GECS_BitsetSum(&testBitset));
-    testBitset++;
-    GECS_DEBUG_BitsetPrint(&testBitset);
-    printf("Num bits: %d\n", GECS_BitsetSum(&testBitset));
-    testBitset = 0;
-    testBitset-=1;
-    GECS_DEBUG_BitsetPrint(&testBitset);
-    printf("Num bits: %d\n", GECS_BitsetSum(&testBitset));
 
-    testBitset = 100;
-    GECS_DEBUG_BitsetPrint(&testBitset);
-    printf("Num bits up to value: %d\n", GECS_BitsetCountUpTo(&testBitset, 5));
-
-    testBitset = 0;
+    GECS_Bitset testBitset = 0;
 
     GECS_BitsetSet(&testBitset, 0, 1);
     GECS_BitsetSet(&testBitset, 1, 1);
-
-
-
-
 
     // Instance test
     GECS_Instance* ecs = GECS_Init();
@@ -42,14 +20,16 @@ int main() {
     GECS_RegisterComponent(ecs, 1, "Position", sizeof(PositionData), NULL);
 
 
-    GECS_ComponentGroup* testCG = GECS_ComponentGroupInit(&testBitset, ecs->baseComponents);
+    GECS_ComponentGroup* testCG = malloc(sizeof(GECS_ComponentGroup));
+    GECS_ComponentGroupInit(testCG, &testBitset, ecs->baseComponents);
+
     GECS_ComponentGroupResize(testCG, 10);
     for (int i = 1; i < 6; ++i) {
         GECS_ComponentGroupRegisterEntity(testCG, i);
     }
     GECS_ComponentGroupRemoveEntity(testCG, 3);
 
-    GECS_ComponentGroupClose(*testCG);
+    GECS_ComponentGroupClose(testCG);
     free(testCG);
 
 

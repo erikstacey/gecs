@@ -24,9 +24,9 @@ typedef struct{
 
 } GECS_ComponentGroup;
 
-// Sets up and allocates a new componentgroup with components specified by the componentmask taken in conjunction with
+// Sets up a new componentgroup with components specified by the componentmask taken in conjunction with
 // baseComponents
-GECS_ComponentGroup* GECS_ComponentGroupInit(GECS_Bitset* componentMask,
+void GECS_ComponentGroupInit(GECS_ComponentGroup* newCG, GECS_Bitset* componentMask,
                                              GECS_ComponentDefinition baseComponents[GECS_MAX_COMPONENTS]);
 // Resizes the component group (all the data array children and the entity id map) to hold a new number of elements
 void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityId newSize);
@@ -48,6 +48,6 @@ void GECS_ComponentGroupMigrate(GECS_ComponentGroup* cgSending, GECS_ComponentGr
 
 // Closes a componentgroup by freeing all its (dynamically allocated) children after instructing them to do the same
 // DOES NOT free c, as this must be handled by its parent ECS instance
-void GECS_ComponentGroupClose(GECS_ComponentGroup c);
+void GECS_ComponentGroupClose(GECS_ComponentGroup* c);
 
 #endif //GECS_GECS_COMPONENTGROUP_H

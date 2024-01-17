@@ -16,8 +16,8 @@ typedef struct{
     void* d;
 } GECS_CGDArray;
 
-// Creates and returns a CGDArray.
-GECS_CGDArray* GECS_CGDArrayInit(GECS_ComponentDefinition* type, GECS_EntityId initSize);
+// Sets up an CGDArray in place. This is intended to operate on elements of allocated CGDArrays
+void GECS_CGDArrayInit(GECS_CGDArray* a, GECS_ComponentDefinition* type, GECS_EntityId initSize);
 
 // resizes the allocated memory for the CGDArray a
 void GECS_CGDArrayResize(GECS_CGDArray* a, GECS_EntityId newSize);

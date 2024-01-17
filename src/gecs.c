@@ -104,9 +104,9 @@ void GECS_RegisterComponent(GECS_Instance* i, GECS_ComponentId id, char* name, s
     }
 }
 
-u_int64_t GECS_GetComponentGroupIndex(const GECS_Bitset* arr, u_int64_t left, u_int64_t right, GECS_Bitset target) {
+uint64_t GECS_GetComponentGroupIndex(const GECS_Bitset* arr, uint64_t left, uint64_t right, GECS_Bitset target) {
     while (left <= right) {
-        u_int64_t mid = left + (right - left) / 2;
+        uint64_t mid = left + (right - left) / 2;
 
         // Check if the target is at the middle
         if (arr[mid] == target)

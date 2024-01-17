@@ -4,13 +4,12 @@
 #include <stdlib.h>
 #include "gecs_cgdarray.h"
 
-GECS_CGDArray* GECS_CGDArrayInit(GECS_ComponentDefinition* type, GECS_EntityId initSize) {
-    GECS_CGDArray* newArray = malloc(sizeof(GECS_CGDArray));
-    GECS_CheckAlloc(newArray, "CGDArrayInit", "Allocated Array");
-    newArray->type = type;
-    newArray->d = malloc((type->size) * initSize);
-    GECS_CheckAlloc(newArray->d, "CGDArrayInit", "Allocated data array");
-    return newArray;
+void GECS_CGDArrayInit(GECS_CGDArray* a, GECS_ComponentDefinition* type, GECS_EntityId initSize) {
+    GECS_CheckInput(a, "CGDArrayInit", "CGDArray");
+    GECS_CheckInput(type, "GCDArrayInit", "type");
+    a->type = type;
+    a->d = malloc((type->size) * initSize);
+    GECS_CheckAlloc(a->d, "CGDArrayInit", "Allocated data array");
 }
 
 void GECS_CGDArrayResize(GECS_CGDArray* a, GECS_EntityId newSize) {
@@ -33,4 +32,5 @@ void* GECS_CGDArrayGetPtrToElement(GECS_CGDArray* a, GECS_EntityId idx) {
 void GECS_CGDArrayClose(GECS_CGDArray* a) {
     free(a->d);
     a->d = NULL;
+    a->type = NULL;
 }
