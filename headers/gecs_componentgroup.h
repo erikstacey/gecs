@@ -29,14 +29,15 @@ typedef struct{
 void GECS_ComponentGroupInit(GECS_ComponentGroup* newCG, GECS_Bitset* componentMask,
                                              GECS_ComponentDefinition baseComponents[GECS_MAX_COMPONENTS]);
 // Resizes the component group (all the data array children and the entity id map) to hold a new number of elements
-void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityId newSize);
+void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityIndex newSize);
 
 // Registers an entity in the component group. Does not set any data, but implicitely assigns space for its data
-GECS_EntityId GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
+// returns the index correspo
+GECS_EntityIndex GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
 // Removes an Entity from the component group. Shifts all data so it's contiguous as well.
 void GECS_ComponentGroupRemoveEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
 // finds and returns the index corresponding to the specified entity
-GECS_EntityId GECS_ComponentGroupFindEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
+GECS_EntityIndex GECS_ComponentGroupFindEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
 // gets a pointer to the CGD array corresponding to the specified component ID
 GECS_CGDArray* GECS_ComponentGroupGetCGDArray(GECS_ComponentGroup* cg, GECS_ComponentId cId);
 // returns a pointer to the component data for the specified entity. THE USER IS RESPONSIBLE FOR CASTING THIS

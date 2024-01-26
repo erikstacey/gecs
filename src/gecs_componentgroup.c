@@ -33,13 +33,13 @@ void GECS_ComponentGroupInit(GECS_ComponentGroup* c, GECS_Bitset* componentMask,
     c->dataArraysSize = 1;
 }
 
-void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityId newSize) {
+void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityIndex newSize) {
     GECS_CheckInput(c, "ComponentGroupResize", "c");
     // resize all data arrays
     for (int i = 0; i < c->numComponents; ++i) {
         GECS_CGDArrayResize(c->dataArrays+i, newSize);
     }
-    GECS_EntityId* newIdList = realloc(c->idList, sizeof(GECS_EntityId) * newSize);
+    GECS_EntityId* newIdList = realloc(c->idList, sizeof(GECS_EntityIndex) * newSize);
     GECS_CheckAlloc(newIdList, "ComponentGroupResize", "Reallocated ID List");
     c->idList = newIdList;
     c->dataArraysSize = newSize;
@@ -56,7 +56,7 @@ void GECS_ComponentGroupClose(GECS_ComponentGroup* c) {
     c->idList = NULL;
 }
 
-GECS_EntityId GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
+GECS_EntityIndex GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
     GECS_CheckInput(cg, "ComponentGroupRegisterEntity", "cg");
     // Check if we must reallocate, do so if necessary
     if (cg->dataArraysLen >= cg->dataArraysSize) {
@@ -64,10 +64,10 @@ GECS_EntityId GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS_En
     }
     cg->idList[cg->dataArraysLen] = id;
     cg->dataArraysLen++;
-
+    return cg->dataArraysLen-1;
 }
 
-GECS_EntityId GECS_ComponentGroupFindEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
+GECS_EntityIndex GECS_ComponentGroupFindEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
     GECS_CheckInput(cg, "ComponentGroupFindEntity", "cg");
     // basic linear search for now
     // can optimize this later if necessary
@@ -117,7 +117,7 @@ void GECS_ComponentGroupMigrate(GECS_ComponentGroup* cgSending, GECS_ComponentGr
     if (sendingIdx == cgSending->dataArraysLen) {
         fprintf(stderr, "[GECS] Error in GECS_ComponentGroupMigrate: cgSending doesn't have entity %du", id);
     }
-    GECS_EntityId receivingIdx = GECS_ComponentGroupRegisterEntity(cgReceiving, id);
+    GECS_EntityIndex receivingIdx = GECS_ComponentGroupRegisterEntity(cgReceiving, id);
 
     // pointers to use in the subsequent loop which indicate where to copy data from and to
     size_t sizeToCopy;
