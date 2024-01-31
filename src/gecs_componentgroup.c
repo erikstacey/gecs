@@ -5,7 +5,7 @@
 #include "gecs_componentgroup.h"
 
 void GECS_ComponentGroupInit(GECS_ComponentGroup* c, GECS_Bitset* componentMask,
-                                             GECS_ComponentDefinition* baseComponents) {
+                                             const GECS_ComponentDefinition* baseComponents) {
     GECS_CheckInput(componentMask, "ComponentGroupInit", "componentMask");
     GECS_CheckInput(c, "ComponentGroupInit", "CG");
 
@@ -67,7 +67,7 @@ GECS_EntityIndex GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS
     return cg->dataArraysLen-1;
 }
 
-GECS_EntityIndex GECS_ComponentGroupFindEntity(GECS_ComponentGroup* cg, GECS_EntityId id) {
+GECS_EntityIndex GECS_ComponentGroupFindEntity(const GECS_ComponentGroup* cg, GECS_EntityId id) {
     GECS_CheckInput(cg, "ComponentGroupFindEntity", "cg");
     // basic linear search for now
     // can optimize this later if necessary
@@ -98,12 +98,12 @@ void GECS_ComponentGroupRemoveEntity(GECS_ComponentGroup* cg, GECS_EntityId id) 
     }
 }
 
-GECS_CGDArray* GECS_ComponentGroupGetCGDArray(GECS_ComponentGroup* cg, GECS_ComponentId cId) {
-    return cg->dataArrays + GECS_BitsetCountUpTo(&(cg->componentMask), cId) - 1;
+GECS_CGDArray* GECS_ComponentGroupGetCGDArray(const GECS_ComponentGroup* cg, GECS_ComponentId cId) {
+    return cg->dataArrays + GECS_BitsetCountUpTo(&(cg->componentMask), cId)-1;
 
 }
 
-void* GECS_ComponentGroupGet(GECS_ComponentGroup* cg, GECS_EntityId eId, GECS_ComponentId cId) {
+void* GECS_ComponentGroupGet(const GECS_ComponentGroup* cg, GECS_EntityId eId, GECS_ComponentId cId) {
     GECS_CGDArray* arr = GECS_ComponentGroupGetCGDArray(cg, cId);
     GECS_EntityId idx = GECS_ComponentGroupFindEntity(cg, eId);
     return GECS_CGDArrayGetPtrToElement(arr, idx);
@@ -139,7 +139,7 @@ void GECS_ComponentGroupMigrate(GECS_ComponentGroup* cgSending, GECS_ComponentGr
                                 "mismatch in component %d!", i);
                 exit(1);
             }
-            memcpy(copyFrom, copyTo, sizeToCopy);
+            memcpy(copyTo, copyFrom, sizeToCopy);
         }
     }
     // Having copied data over, it is time to remove the entity from the sending array. This crunches the sending group

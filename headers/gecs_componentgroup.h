@@ -27,7 +27,7 @@ typedef struct{
 // Sets up a new componentgroup with components specified by the componentmask taken in conjunction with
 // baseComponents
 void GECS_ComponentGroupInit(GECS_ComponentGroup* newCG, GECS_Bitset* componentMask,
-                                             GECS_ComponentDefinition baseComponents[GECS_MAX_COMPONENTS]);
+                                             const GECS_ComponentDefinition* baseComponents);
 // Resizes the component group (all the data array children and the entity id map) to hold a new number of elements
 void GECS_ComponentGroupResize(GECS_ComponentGroup* c, GECS_EntityIndex newSize);
 
@@ -37,12 +37,12 @@ GECS_EntityIndex GECS_ComponentGroupRegisterEntity(GECS_ComponentGroup* cg, GECS
 // Removes an Entity from the component group. Shifts all data so it's contiguous as well.
 void GECS_ComponentGroupRemoveEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
 // finds and returns the index corresponding to the specified entity
-GECS_EntityIndex GECS_ComponentGroupFindEntity(GECS_ComponentGroup* cg, GECS_EntityId id);
+GECS_EntityIndex GECS_ComponentGroupFindEntity(const GECS_ComponentGroup* cg, GECS_EntityId id);
 // gets a pointer to the CGD array corresponding to the specified component ID
-GECS_CGDArray* GECS_ComponentGroupGetCGDArray(GECS_ComponentGroup* cg, GECS_ComponentId cId);
+GECS_CGDArray* GECS_ComponentGroupGetCGDArray(const GECS_ComponentGroup* cg, GECS_ComponentId cId);
 // returns a pointer to the component data for the specified entity. THE USER IS RESPONSIBLE FOR CASTING THIS
 // TO THE CORRECT TYPE.
-void* GECS_ComponentGroupGet(GECS_ComponentGroup* cg, GECS_EntityId eId, GECS_ComponentId cId);
+void* GECS_ComponentGroupGet(const GECS_ComponentGroup* cg, GECS_EntityId eId, GECS_ComponentId cId);
 
 void GECS_ComponentGroupMigrate(GECS_ComponentGroup* cgSending, GECS_ComponentGroup* cgReceiving, GECS_EntityId id);
 
