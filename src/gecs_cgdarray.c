@@ -23,9 +23,10 @@ void GECS_CGDArrayResize(GECS_CGDArray* a, GECS_EntityId newSize) {
 void* GECS_CGDArrayGetPtrToElement(GECS_CGDArray* a, GECS_EntityId idx) {
     // Char ptrs increment by 1 byte when you add 1
     // Use this to increment pointer by explicit number of bytes
-    char* charPtr = (char*) a;
-    a += (a->type->size) * idx;
-    return (void*) a;
+    char* charPtr = (char*) a->d;
+    size_t elementSize = a->type->size;
+    charPtr += elementSize * idx;
+    return (void*) charPtr;
 
 }
 
